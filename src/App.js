@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import { auth } from './firebase/firebase.utils';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 import Header from './components/header/header.component';
 import HomePage from './pages/homepage/homepage.component';
@@ -24,10 +24,24 @@ class App extends React.Component {
 
   componentDidMount() {
     // to make the app aware of any auth changes on firebase
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
 
-      console.log(user);
+        userRef.onSnapshot(snapShot => {
+          // get the data of the user and pass in the object
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+            }
+          });
+          console.log(this.state);
+        });
+      } else {
+        this.setState({ currentUser: userAuth });
+        console.log('user not logged in');
+      }
     });
   }
 
