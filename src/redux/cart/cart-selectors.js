@@ -8,7 +8,12 @@ const selectCart = state => state.cart;
 // pass out the cart items
 export const selectCartItems = createSelector(
     [selectCart],
-    (cart) => cart.cartItems
+    cart => cart.cartItems
+);
+
+export const selectCartHidden = createSelector(
+    [selectCart],
+    cart => cart.hidden
 );
 
 // the reducer state is passed into the selector
