@@ -20,3 +20,23 @@ export const addItemToCart = (cartItems, cartItemToAdd) => {
     // the quantity gets attached the first time around
     return [...cartItems, { ...cartItemToAdd, quantity: 1 }];
 };
+
+// figure out if there is an existing cart item already in the cart items 
+// check if the quantity = 1 so it can be removed
+// otherwise decrease the quantity
+export const removeItemFromCart = (cartItems, cartItemToRemove) => {
+    const existingCartItem = cartItems.find(
+        cartItem => cartItem.id === cartItemToRemove.id
+    );
+
+    if (existingCartItem.quantity === 1) {
+        return cartItems.filter(cartItem => cartItem.id !== cartItemToRemove.id);
+    }
+
+    // keep every other cart item the exact same as they don't need to be modified
+    return cartItems.map( cartItem =>
+        cartItem.id === cartItemToRemove.id 
+            ? { ...cartItem, quantity: cartItem.quantity - 1 }
+            : cartItem
+    );
+}
