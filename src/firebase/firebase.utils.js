@@ -12,6 +12,8 @@ const config = {
     measurementId: "G-B64CGR0TEV"
 };
 
+firebase.initializeApp(config);
+
 export const createUserProfileDocument = async (userAuth, additionalData) => {
     if (!userAuth) return;
 
@@ -38,7 +40,43 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     return userRef;
 };
 
-firebase.initializeApp(config);
+export const addCollectionAndDocuments = async (
+    collectionKey, objectsToAdd
+) => {
+    // create collection using collectionKey
+    const collectionRef = firestore.collection(collectionKey);
+    // add objects into the collection
+    const batch = firestore.batch();
+    // .forEach() doesn't return an array the way .map() does
+    objectsToAdd.forEach(obj => {
+        // get the document at an empty string, randomnly generate a random id
+        const newDocRef = collectionRef.doc();
+        // set the values
+        batch.set(newDocRef, obj);
+    });
+    // fire off the batch request
+    return await batch.commit();
+};
+
+// get array of collections (the whole snapshot) and convert to an object
+export const convertCollectionsSnapshotToMap = (collections) => {
+    const transformedCollection = collections.docs.map(doc => {
+        const { title, items } = doc.data();
+
+        return {
+            routeName: encodeURI(title.toLowerCase()),
+            id: doc.id,
+            title,
+            items
+        }
+    });
+    
+    return transformedCollection.reduce((accumulator, collection) => {
+        // get empty object with the property of the category that's equal to the corresponding collection
+        accumulator[collection.title.toLowerCase()] = collection;
+        return accumulator;
+    }, {});
+};
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();

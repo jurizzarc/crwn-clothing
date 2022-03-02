@@ -7,6 +7,9 @@ import { setCurrentUser } from './redux/user/user-actions';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { selectCurrentUser } from './redux/user/user-selectors';
 
+// import { selectCollectionsForPreview } from './redux/shop/shop-selectors';
+// import { addCollectionAndDocuments } from './firebase/firebase.utils';
+
 import Header from './components/header/header.component';
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
@@ -37,6 +40,13 @@ class App extends React.Component {
       } else {
         setCurrentUser(userAuth);
       }
+
+      // return an array of just objects with the values that we want to keep
+      // addCollectionAndDocuments(
+      //   'collections', 
+      //   collectionsArray.map(({title, items}) => ({ title, items }))
+      // );
+
     });
   }
 
@@ -72,6 +82,7 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser
+  // collectionsArray: selectCollectionsForPreview
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -81,4 +92,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps, 
   mapDispatchToProps
-  )(App);
+)(App);
