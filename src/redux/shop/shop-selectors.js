@@ -28,3 +28,10 @@ export const selectIsCollectionFetching = createSelector(
     [selectShop],
     shop => shop.isFetching
 );
+
+// a selector that checks whether or not the collections value is actually loaded
+// converts value to a boolean
+export const selectIsCollectionsLoaded = createSelector(
+    [selectShop],
+    shop => !!shop.collections
+);
