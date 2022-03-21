@@ -3,9 +3,8 @@ import { persistStore } from 'redux-persist'; // allows the browser to cache the
 import logger from 'redux-logger';
 import createSageMiddleware from 'redux-saga';
 
-import { fetchCollectionsStart } from './shop/shop-sagas';
-
 import rootReducer from './root-reducer';
+import rootSaga from './root-saga';
 
 const sagaMiddleware = createSageMiddleware();
 
@@ -18,6 +17,6 @@ if (process.env.NODE_ENV === 'development') {
 
 export const store = createStore(rootReducer, applyMiddleware(...middlewares));
 
-sagaMiddleware.run(fetchCollectionsStart);
+sagaMiddleware.run(rootSaga);
 
 export const persistor = persistStore(store);
