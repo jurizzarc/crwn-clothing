@@ -2,7 +2,7 @@ import { takeLatest, put, all, call } from 'redux-saga/effects';
 
 import UserActionTypes from './user-types';
 
-import { auth, googleProvider, createUserProfileDocument, getCurrentUser } from '../../firebase/firebase.utils';
+import { auth, googleProvider, createUserProfileDocument, getCurrentUser } from '../../utils/firebase/firebase.utils';
 
 import { signInSuccess, signInFailure, signOutSuccess, signOutFailure, signUpSuccess, signUpFailure } from './user-actions';
 

@@ -5,9 +5,10 @@ import { createStructuredSelector } from 'reselect';
 import { selectCartItems, selectCartTotal } from '../../redux/cart/cart-selectors';
 
 import CheckoutItem from '../../components/checkout-item/checkout-item.component';
-import StripeCheckoutButton from '../../components/stripe-button/stripe-button.component';
+// import StripeCheckoutButton from '../../components/stripe-button/stripe-button.component';
+import PaymentForm from '../../components/payment-form/payment-form.component';
 
-import { CheckoutPageContainer, CheckoutHeader, CheckoutHeaderBlock, CheckoutTotal, TestWarning } from './checkout.styles';
+import { CheckoutPageContainer, CheckoutHeader, CheckoutHeaderBlock, CheckoutTotal } from './checkout.styles';
 
 const CheckoutPage = ({ cartItems, total }) => {
     return (
@@ -37,12 +38,8 @@ const CheckoutPage = ({ cartItems, total }) => {
             <CheckoutTotal>
                 <span>TOTAL: ${total}</span>
             </CheckoutTotal>
-            <TestWarning>
-                *Please use the following test credit card for payments*
-                <br />
-                4242 4242 4242 4242 - Exp: 01/25 - CVV: 123
-            </TestWarning>
-            <StripeCheckoutButton price={total} />
+            
+            <PaymentForm />
         </CheckoutPageContainer>
     );
 };
