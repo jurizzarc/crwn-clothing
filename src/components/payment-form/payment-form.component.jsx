@@ -15,15 +15,42 @@ const PaymentForm = () => {
             return;
         }
 
-        
+        const PORT = '49894';
+
+        const response = await fetch(`http://localhost:${PORT}/.netlify/functions/create-payment-intent`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ amount: 10000 })
+        }).then((res) => res.json());
+
+        const { paymentIntent: { client_secret } } = response;
+
+        const paymentResult = await stripe.confirmCardPayment(client_secret, {
+            payment_method: {
+                card: elements.getElement(CardElement),
+                billing_details: {
+                    name: 'Jurizza'
+                }
+            }
+        });
+
+        if (paymentResult.error) {
+            alert(paymentResult.error);
+        } else {
+            if (paymentResult.paymentIntent.status === 'succeeded') {
+                alert('Payment Successful.');
+            }
+        }
     };
 
     return (
         <PaymentFormContainer>
-            <FormContainer>
+            <FormContainer onSubmit={paymentHandler}>
                 <h2>Credit Card Payment:</h2>
                 <CardElement />
-                <CustomButton type="button" inverted>Pay Now</CustomButton>
+                <CustomButton type="submit" inverted>Pay Now</CustomButton>
             </FormContainer>
         </PaymentFormContainer>
     );
