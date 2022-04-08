@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components';
 
+import { SpinnerContainer } from '../with-spinner/with-spinner.styles';
+
 const buttonStyles = css`
     background-color: black;
     color: white;
@@ -57,6 +59,12 @@ export const CustomButtonContainer = styled.button`
     cursor: pointer;
     display: flex;
     justify-content: center;
+    align-items: center;
 
     ${getButtonStyles}
+`;
+
+export const ButtonSpinner = styled(SpinnerContainer)`
+    width: 30px;
+    height: 30px;
 `;

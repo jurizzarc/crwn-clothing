@@ -1,4 +1,9 @@
+import { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { useSelector } from 'react-redux';
+
+import { selectCartTotal } from '../../redux/cart/cart-selectors';
+import { selectCurrentUser } from '../../redux/user/user-selectors';
 
 import CustomButton from '../custom-button/custom-button.component';
 
@@ -7,6 +12,9 @@ import { PaymentFormContainer, FormContainer } from './payment-form.styles';
 const PaymentForm = () => {
     const stripe = useStripe();
     const elements = useElements();
+    const amount = useSelector(selectCartTotal);
+    const currentUser = useSelector(selectCurrentUser);
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
     const paymentHandler = async (e) => {
         e.preventDefault();
@@ -15,14 +23,16 @@ const PaymentForm = () => {
             return;
         }
 
-        const PORT = '49894';
+        setIsProcessingPayment(true);
+
+        const PORT = '57223';
 
         const response = await fetch(`http://localhost:${PORT}/.netlify/functions/create-payment-intent`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ amount: 10000 })
+            body: JSON.stringify({ amount: amount * 100 })
         }).then((res) => res.json());
 
         const { paymentIntent: { client_secret } } = response;
@@ -31,10 +41,12 @@ const PaymentForm = () => {
             payment_method: {
                 card: elements.getElement(CardElement),
                 billing_details: {
-                    name: 'Jurizza'
+                    name: currentUser ? currentUser.displayName : 'Guest'
                 }
             }
         });
+
+        setIsProcessingPayment(false);
 
         if (paymentResult.error) {
             alert(paymentResult.error);
@@ -50,7 +62,13 @@ const PaymentForm = () => {
             <FormContainer onSubmit={paymentHandler}>
                 <h2>Credit Card Payment:</h2>
                 <CardElement />
-                <CustomButton type="submit" inverted>Pay Now</CustomButton>
+                <CustomButton 
+                    isLoading={isProcessingPayment} 
+                    type="submit" 
+                    inverted
+                >
+                    Pay Now
+                </CustomButton>
             </FormContainer>
         </PaymentFormContainer>
     );
