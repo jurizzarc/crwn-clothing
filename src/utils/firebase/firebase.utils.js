@@ -1,97 +1,130 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
-import 'firebase/compat/auth';
+import { initializeApp } from 'firebase/app';
+import { 
+    getAuth,
+    signInWithRedirect,
+    signInWithPopup,
+    GoogleAuthProvider,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged 
+} from 'firebase/auth';
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    collection,
+    writeBatch,
+    query,
+    getDocs
+} from 'firebase/firestore';
 
-const config = {
+const firebaseConfig = {
     apiKey: "AIzaSyCh_8VJ6aV0lSkMK-P1hI0qTjH3D5I5ZpI",
     authDomain: "crwn-db-1b79e.firebaseapp.com",
     projectId: "crwn-db-1b79e",
     storageBucket: "crwn-db-1b79e.appspot.com",
     messagingSenderId: "228367670395",
     appId: "1:228367670395:web:ac315accda67cbd0d096de",
-    measurementId: "G-B64CGR0TEV"
 };
 
-firebase.initializeApp(config);
+const firebaseApp = initializeApp(firebaseConfig);
 
-export const createUserProfileDocument = async (userAuth, additionalData) => {
+const googleProvider = new GoogleAuthProvider();
+
+googleProvider.setCustomParameters({
+    prompt: 'select_account'
+});
+
+export const auth = getAuth();
+export const signInWithGooglePopup = () =>
+    signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () =>
+    signInWithRedirect(auth, googleProvider);
+
+export const db = getFirestore();
+
+export const addCollectionAndDocuments = async (
+    collectionKey, 
+    objectsToAdd,
+    field
+) => {
+    const collectionRef = collection(db, collectionKey);
+    const batch = writeBatch(db);
+
+    objectsToAdd.forEach((object) => {
+        const docRef = doc(collectionRef, object.title.toLowerCase());
+        batch.set(docRef, object);
+    });
+    
+    await batch.commit();
+    console.log('Done');
+};
+
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db, 'categories');
+    const q = query(collectionRef);
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+};
+
+export const createUserDocumentFromAuth = async (
+    userAuth, 
+    additionalInformation = {}
+) => {
     if (!userAuth) return;
 
-    const userRef = firestore.doc(`users/${userAuth.uid}`);
+    const userDocRef = doc(db, 'users', userAuth.uid);
 
-    const snapShot = await userRef.get();
+    const userSnapshot = await getDoc(userDocRef);
 
-    if (!snapShot.exists) {
+    if (!userSnapshot.exists()) {
         const { displayName, email } = userAuth;
         const createdAt = new Date();
 
         try {
-            await userRef.set({
+            await setDoc(userDocRef, {
                 displayName,
                 email,
                 createdAt,
-                ...additionalData
+                ...additionalInformation
             });
         } catch (error) {
-            console.log('error creating user', error.message);
+            console.log('Error creating the user', error.message);
         }
     }
 
-    return userRef;
+    return userSnapshot;
 };
 
-export const addCollectionAndDocuments = async (
-    collectionKey, objectsToAdd
-) => {
-    // create collection using collectionKey
-    const collectionRef = firestore.collection(collectionKey);
-    // add objects into the collection
-    const batch = firestore.batch();
-    // .forEach() doesn't return an array the way .map() does
-    objectsToAdd.forEach(obj => {
-        // get the document at an empty string, randomnly generate a random id
-        const newDocRef = collectionRef.doc();
-        // set the values
-        batch.set(newDocRef, obj);
-    });
-    // fire off the batch request
-    return await batch.commit();
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+    if (!email || !password) return;
+
+    return await createUserWithEmailAndPassword(auth, email, password);
 };
 
-// get array of collections (the whole snapshot) and convert to an object
-export const convertCollectionsSnapshotToMap = (collections) => {
-    const transformedCollection = collections.docs.map(doc => {
-        const { title, items } = doc.data();
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+    if (!email || !password) return;
 
-        return {
-            routeName: encodeURI(title.toLowerCase()),
-            id: doc.id,
-            title,
-            items
-        };
-    });
-    
-    return transformedCollection.reduce((accumulator, collection) => {
-        // get empty object with the property of the category that's equal to the corresponding collection
-        accumulator[collection.title.toLowerCase()] = collection;
-        return accumulator;
-    }, {});
+    return await signInWithEmailAndPassword(auth, email, password);
 };
+
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) =>
+    onAuthStateChanged(auth, callback);
 
 export const getCurrentUser = () => {
     return new Promise((resolve, reject) => {
-        const unsubscribe = auth.onAuthStateChanged(userAuth => {
-            unsubscribe();
-            resolve(userAuth);
-        }, reject);
+        const unsubscribe = auth.onAuthStateChanged(
+            auth,
+            (userAuth) => {
+                unsubscribe();
+                resolve(userAuth);
+            }, 
+            reject
+        );
     });
 };
-
-export const auth = firebase.auth();
-export const firestore = firebase.firestore();
-
-export const googleProvider = new firebase.auth.GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: 'select_account' });
-export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
-
-export default firebase;

@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useSelector } from 'react-redux';
 
-import { selectCartTotal } from '../../redux/cart/cart-selectors';
-import { selectCurrentUser } from '../../redux/user/user-selectors';
+import { selectCartTotal } from '../../store/cart/cart-selectors';
+import { selectCurrentUser } from '../../store/user/user-selectors';
 
 import CustomButton from '../custom-button/custom-button.component';
 
