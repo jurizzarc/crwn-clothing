@@ -4,8 +4,8 @@ import { createStructuredSelector } from 'reselect';
 
 import { selectIsCollectionsLoaded } from '../../store/shop/shop-selectors';
 
-import WithSpinner from '../../components/with-spinner/with-spinner.component';
-import CollectionPage from './collection.component'
+import WithSpinner from '../../components/spinner/spinner.component';
+import CollectionPage from './categories-preview.component'
 
 const mapStateToProps = createStructuredSelector({
     isLoading: state => !selectIsCollectionsLoaded(state)

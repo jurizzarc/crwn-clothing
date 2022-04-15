@@ -1,23 +1,22 @@
 import styled from 'styled-components';
 
-export const CollectionPreviewContainer = styled.div`
+import { Link } from 'react-router-dom';
+
+export const CategoryPreviewContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin-bottom: 30px;
 `;
 
-export const CategoryTitle = styled.h1`
+export const CategoryTitle = styled(Link)`
     font-size: 28px;
     margin-bottom: 25px;
     text-transform: uppercase;
     cursor: pointer;
-
-    &:hover {
-        color: grey;
-    }
 `;
 
 export const PreviewContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 20px;
 `;

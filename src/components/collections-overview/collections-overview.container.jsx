@@ -4,7 +4,7 @@ import { compose } from 'redux';
 
 import { selectIsCollectionFetching } from '../../store/shop/shop-selectors';
 
-import WithSpinner from '../with-spinner/with-spinner.component';
+import WithSpinner from '../spinner/spinner.component';
 
 import CollectionsOverview from './collections-overview.component';
 

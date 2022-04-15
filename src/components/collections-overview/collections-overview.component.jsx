@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 
 import { selectCollectionsForPreview } from '../../store/shop/shop-selectors';
 
-import CollectionPreview from '../collection-preview/collection-preview.component';
+import CollectionPreview from '../category-preview/category-preview.component';
 
 import { CollectionsOverviewContainer } from './collections-overview.styles';
 

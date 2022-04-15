@@ -37,13 +37,13 @@ googleProvider.setCustomParameters({
     prompt: 'select_account',
 });
 
-export const auth = getAuth(firebaseApp);
+export const auth = getAuth();
 export const signInWithGooglePopup = () =>
     signInWithPopup(auth, googleProvider);
 export const signInWithGoogleRedirect = () =>
     signInWithRedirect(auth, googleProvider);
 
-export const db = getFirestore(firebaseApp);
+export const db = getFirestore();
 
 export const addCollectionAndDocuments = async (
     collectionKey,
@@ -63,7 +63,7 @@ export const addCollectionAndDocuments = async (
 };
 
 export const getCategoriesAndDocuments = async () => {
-    const collectionRef = collection(db, 'categories');
+    const collectionRef = collection(db, 'collections');
     const q = query(collectionRef);
 
     const querySnapshot = await getDocs(q);
