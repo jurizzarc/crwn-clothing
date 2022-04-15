@@ -10,8 +10,6 @@ import Navigation from './routes/navigation/navigation.component';
 // import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 // import CheckoutPage from './pages/checkout/checkout.component';
 
-import './App.css';
-
 const App = () => {
   const dispatch = useDispatch();
 
@@ -22,30 +20,9 @@ const App = () => {
   return (
     <Routes>
       <Route path='/' element={<Navigation />}>
-        
-        
+      
       </Route>
     </Routes>
-
-    /* <div>
-      <Header />
-      <Switch>
-        <Route exact path='/' component={HomePage} />
-        <Route path='/shop' component={ShopPage} />
-        <Route exact path='/checkout' component={CheckoutPage} />
-        <Route 
-          exact 
-          path='/signin' 
-          render={() => 
-            this.props.currentUser ? (
-              <Redirect to='/' />
-            ) : (
-              <SignInAndSignUpPage />
-            )
-          } 
-        />
-      </Switch>
-    </div> */
   );
 }
 

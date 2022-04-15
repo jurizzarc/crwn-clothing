@@ -15,7 +15,7 @@ const persistConfig = {
 
 const sagaMiddleware = createSageMiddleware();
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // set up middlewares
 const middleWares = [

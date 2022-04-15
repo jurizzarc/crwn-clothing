@@ -12,10 +12,10 @@ import CartIcon from '../../components/cart-icon/cart-icon.component';
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
 
 import { 
-    HeaderContainer, 
+    NavigationContainer, 
     LogoContainer, 
-    OptionsContainer, 
-    OptionLink 
+    NavLinks, 
+    NavLink 
 } from './navigation.styles';
 
 const Navigation = () => {
@@ -27,25 +27,25 @@ const Navigation = () => {
 
     return (
         <Fragment>
-            <HeaderContainer>
+            <NavigationContainer>
                 <LogoContainer to="/">
                     <Logo className='logo' />
                 </LogoContainer>
-                <OptionsContainer>
-                    <OptionLink to='/shop'>SHOP</OptionLink>
+                <NavLinks>
+                    <NavLink to='/shop'>SHOP</NavLink>
                     {
                         currentUser ? (
-                            <OptionLink as='span' onClick={signOutUser}>
+                            <NavLink as='span' onClick={signOutUser}>
                                 SIGN OUT
-                            </OptionLink>
+                            </NavLink>
                         ) : (
-                            <OptionLink to='/signin'>SIGN IN</OptionLink>
+                            <NavLink to='/signin'>SIGN IN</NavLink>
                         )
                     }
                     <CartIcon />
-                </OptionsContainer>
-                { isCartOpen && <CartDropdown /> }
-            </HeaderContainer>
+                </NavLinks>
+                {isCartOpen && <CartDropdown />}
+            </NavigationContainer>
             <Outlet />
         </Fragment>
     );
