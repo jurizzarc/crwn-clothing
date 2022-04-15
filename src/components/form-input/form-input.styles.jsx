@@ -11,6 +11,18 @@ const shrinkLabelStyles = css`
     color: ${colours.main};
 `;
 
+export const FormInputLabel = styled.label`
+    color: $sub-color;
+    font-size: 16px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 300ms ease all;
+    ${({ shrink }) => shrink && shrinkLabelStyles}
+`;
+
 export const FormGroup = styled.div`
     position: relative;
     margin: 45px 0;
@@ -37,22 +49,7 @@ export const FormInputField = styled.input`
         outline: none;
     }
 
-    &:focus ~ label {
-        ${shrinkLabelStyles}
-    }
-`;
-
-export const FormInputLabel = styled.label`
-    color: $sub-color;
-    font-size: 16px;
-    font-weight: normal;
-    position: absolute;
-    pointer-events: none;
-    left: 5px;
-    top: 10px;
-    transition: 300ms ease all;
-
-    &.shrink {
-        ${shrinkLabelStyles}
+    &:focus ~ ${FormInputLabel} {
+        ${shrinkLabelStyles};
     }
 `;

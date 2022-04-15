@@ -23,7 +23,7 @@ const Navigation = () => {
     const currentUser = useSelector(selectCurrentUser);
     const isCartOpen = useSelector(selectIsCartOpen);
 
-    const signOutUser = () => dispatch(signOutStart);
+    const signOutUser = () => dispatch(signOutStart());
 
     return (
         <Fragment>
@@ -39,7 +39,7 @@ const Navigation = () => {
                                 SIGN OUT
                             </NavLink>
                         ) : (
-                            <NavLink to='/signin'>SIGN IN</NavLink>
+                            <NavLink to='/auth'>SIGN IN</NavLink>
                         )
                     }
                     <CartIcon />
