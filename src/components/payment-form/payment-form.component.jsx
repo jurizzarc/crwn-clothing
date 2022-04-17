@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useSelector } from 'react-redux';
 
-import { selectCartTotal } from '../../store/cart/cart-selectors';
-import { selectCurrentUser } from '../../store/user/user-selectors';
+import { selectCartTotal } from '../../store/cart/cart.selector';
+import { selectCurrentUser } from '../../store/user/user.selector';
 
-import CustomButton from '../custom-button/custom-button.component';
+import { BUTTON_TYPE_CLASSES } from '../button/button.component';
 
-import { PaymentFormContainer, FormContainer } from './payment-form.styles';
+import { PaymentFormContainer, FormContainer, PaymentButton } from './payment-form.styles';
 
 const PaymentForm = () => {
     const stripe = useStripe();
@@ -25,9 +25,7 @@ const PaymentForm = () => {
 
         setIsProcessingPayment(true);
 
-        const PORT = '57223';
-
-        const response = await fetch(`http://localhost:${PORT}/.netlify/functions/create-payment-intent`, {
+        const response = await fetch('/.netlify/functions/create-payment-intent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -62,13 +60,12 @@ const PaymentForm = () => {
             <FormContainer onSubmit={paymentHandler}>
                 <h2>Credit Card Payment:</h2>
                 <CardElement />
-                <CustomButton 
-                    isLoading={isProcessingPayment} 
-                    type="submit" 
-                    inverted
+                <PaymentButton 
+                    buttonType={BUTTON_TYPE_CLASSES.inverted}
+                    isLoading={isProcessingPayment}
                 >
                     Pay Now
-                </CustomButton>
+                </PaymentButton>
             </FormContainer>
         </PaymentFormContainer>
     );

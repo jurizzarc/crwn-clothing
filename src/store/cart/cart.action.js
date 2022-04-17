@@ -3,7 +3,7 @@ import { createAction } from '../../utils/reducer/reducer.utils';
 
 const addCartItem = (cartItems, productToAdd) => {
     const existingCartItem = cartItems.find(
-        (cartItem) => cartItems.id === productToAdd.id
+        (cartItem) => cartItem.id === productToAdd.id
     );
 
     if (existingCartItem) {

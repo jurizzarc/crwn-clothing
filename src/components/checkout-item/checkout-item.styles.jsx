@@ -10,7 +10,7 @@ export const CheckoutItemContainer = styled.div`
     align-items: center;
 `;
 
-export const CheckoutItemImage = styled.div`
+export const CheckoutItemImageContainer = styled.div`
     width: 23%;
     padding-right: 15px;
 
@@ -20,20 +20,20 @@ export const CheckoutItemImage = styled.div`
     }
 `;
 
-export const ItemInfo = styled.span`
+export const BaseSpan = styled.span`
     width: 23%;
 `;
 
-export const ItemQuantity = styled(ItemInfo)`
+export const ItemQuantity = styled(BaseSpan)`
     display: flex;
+`;
 
-    span {
-        margin: 0 10px; 
-    }
+export const ItemArrow = styled.div`
+    cursor: pointer;
+`;
 
-    div {
-        cursor: pointer;
-    }
+export const ItemValue = styled.span`
+    margin: 0 10px;
 `;
 
 export const RemoveItemButton = styled.div`
