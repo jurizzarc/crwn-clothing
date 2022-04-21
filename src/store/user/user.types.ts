@@ -12,9 +12,3 @@ export enum USER_ACTION_TYPES {
     SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS',
     SIGN_UP_FAILURE = 'user/SIGN_UP_FAILURE'
 };
-
-export type User = {
-    email: string;
-    password: string;
-    displayName: string
-};
